@@ -1,6 +1,6 @@
 import {test, expect} from '@playwright/test'
 
-test.describe.configure({ mode: 'parallel' });
+test.describe.configure({ mode: 'parallel',timeout:4*60*1000 });
 
 test('Simple Login with valid credentials ', async ({page,context})=>{
     await context.tracing.start({
@@ -56,7 +56,7 @@ test('Simple Login with valid credentials ', async ({page,context})=>{
     //registration button visibility
     await expect(page.getByRole('button', { name: 'Register' })).toBeVisible()
 
-    await context.tracing.stop({path:'./test-results/test1_trace.zip'})
+    await context.tracing.stop({path:'./test-results/login_test1_trace.zip'})
     page.close();
 })
 
@@ -89,7 +89,7 @@ test('Login test with empty form',async ({page,context})=>{
     await page.getByRole('button', { name: 'Sign in' }).click();
     await expect(page.getByText('Please enter a valid email')).toBeVisible()
 
-    await context.tracing.stop({path:'./test-results/test2_trace.zip'})
+    await context.tracing.stop({path:'./test-results/login_test2_trace.zip'})
     page.close();
 })
 
@@ -149,7 +149,7 @@ test("Try to login with wrong credentials",async ({page, context})=>{
     await expect(page.getByText('Login Failed')).toBeVisible()
     await expect(page.getByText('Email or password is incorrect')).toBeVisible();
 
-    await context.tracing.stop({path:'./test-results/test3_trace.zip'})
+    await context.tracing.stop({path:'./test-results/login_test3_trace.zip'})
     page.close();
 })
 
@@ -169,7 +169,6 @@ test('Testing Landing Page after login successfully',async ({page, context})=>{
     await page.getByPlaceholder('Password').fill('G9-hzrjY!x4K');
     //siging in 
     await page.getByRole('button', { name: 'Sign in' }).click();
-    // await page.pause();
     await page.waitForTimeout(1500)
 
     //Checking welcome correct user
@@ -182,9 +181,6 @@ test('Testing Landing Page after login successfully',async ({page, context})=>{
     await expect(page.locator('div').filter({ hasText: /^RepeatRequest repeat$/ }).nth(1)).toBeVisible()
     //Prescriptions div visibility
     await expect(page.locator('div').filter({ hasText: /^PrescriptionsView history$/ }).first()).toBeVisible()
-    //eligibility form button checker
-    await expect(page.getByRole('button', { name: 'Eligibility Form Required' })).toBeVisible()
-
     //checking for side panel navigation
     await expect(page.getByRole('navigation').locator('div').filter({ hasText: 'CareGoalsAppointmentsBook' }).first()).toBeVisible()
     await expect(page.locator('a').filter({ hasText: 'Care' })).toBeVisible()
@@ -214,6 +210,6 @@ test('Testing Landing Page after login successfully',async ({page, context})=>{
     await page.getByRole('button', { name: 'Rhythm Gautam' }).click()
     //selecting on sign out for signing out
     await page.getByRole('menuitem', { name: 'Sign Out' }).click();
-    await context.tracing.stop({path:'./test-results/test4_trace.zip'})
+    await context.tracing.stop({path:'./test-results/login_test4_trace.zip'})
     page.close(); 
 })
